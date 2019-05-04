@@ -1,0 +1,129 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.bolbat.snippets</groupId>
+	<artifactId>serialization-grpc-protobuf</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<name>Snippets for gRPC/Protobuf Serialization</name>
+	<description>Snippets for gRPC/Protobuf Serialization</description>
+
+	<parent>
+		<groupId>net.bolbat</groupId>
+		<artifactId>bb-parent</artifactId>
+		<version>15</version>
+	</parent>
+
+	<properties>
+		<!-- Logging dependencies -->
+		<bb-logging-bom.version>0.1</bb-logging-bom.version>
+
+		<!-- gRPC/Protobuf dependencies -->
+		<protobuf.version>3.7.1</protobuf.version>
+		<protobuf_protoc.version>${protobuf.version}</protobuf_protoc.version>
+		<grpc.version>1.20.0</grpc.version>
+
+		<!-- Testing dependencies -->
+		<bb-test.version>0.1.0</bb-test.version>
+
+		<!-- Plugins dependencies -->
+		<os-maven-plugin.version>1.6.2</os-maven-plugin.version>
+		<protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Logging dependencies -->
+			<dependency>
+				<groupId>net.bolbat</groupId>
+				<artifactId>bb-logging-bom</artifactId>
+				<version>${bb-logging-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Common dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!-- gRPC/Protobuf dependencies -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+
+		<!-- Testing dependencies -->
+		<dependency>
+			<groupId>net.bolbat</groupId>
+			<artifactId>bb-test</artifactId>
+			<version>${bb-test.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+			</extension>
+		</extensions>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>kr.motd.maven</groupId>
+					<artifactId>os-maven-plugin</artifactId>
+					<version>${os-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.xolstice.maven.plugins</groupId>
+					<artifactId>protobuf-maven-plugin</artifactId>
+					<version>${protobuf-maven-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<configuration>
+					<protocArtifact>com.google.protobuf:protoc:${protobuf_protoc.version}:exe:${os.detected.name}-${os.detected.arch}</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.name}-${os.detected.arch}</pluginArtifact>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-custom</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
